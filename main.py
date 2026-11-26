@@ -33,6 +33,11 @@ def main():
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="\n") as f:
         f.write(entry)
+    # Post-write check: what landed on disk must be exactly the entry.
+    with open(OUTPUT_PATH, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != entry:
+        raise RuntimeError("output file does not match the entry")
     print(f"Wrote {len(entry)} chars to {OUTPUT_PATH}: {entry}")
     return 0
 
